@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Pendaftaran Mahasiswa Baru | Sistem Input Data Modern</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #e9f0fc 0%, #d9e3f0 100%);
+      margin: 0;
+      padding: 24px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* kartu utama */
+    .card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 32px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+      backdrop-filter: blur(0px);
+      overflow: hidden;
+      margin-bottom: 32px;
+      transition: all 0.2s;
+    }
+
+    .card-header {
+      background: #1e2a47;
+      color: white;
+      padding: 18px 28px;
+    }
+
+    .card-header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .card-header p {
+      margin: 6px 0 0;
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    .card-body {
+      padding: 28px 30px;
+    }
+
+    /* form grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px 30px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      color: #1e2a47;
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+    }
+
+    .input-group input, .input-group select {
+      padding: 12px 14px;
+      border: 1.5px solid #cfdfed;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      background: white;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      outline: none;
+      border-color: #2c5282;
+      box-shadow: 0 0 0 3px rgba(44,82,130,0.2);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      background: #f8fafc;
+      padding: 8px 14px;
+      border-radius: 40px;
+      border: 1.5px solid #cfdfed;
+    }
+
+    .radio-group label {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .nilai-row {
+      grid-column: span 1;
+      background: #fefce8;
+      border-radius: 24px;
+      padding: 8px 14px;
+      border-left: 5px solid #facc15;
+    }
+
+    .button-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 18px;
+      margin-top: 35px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    .btn-primary {
+      background: #1e2a47;
+      color: white;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary:hover {
+      background: #0f1a2f;
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-reset:hover {
+      background: #e2e8f0;
+    }
+
+    /* tabel */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 24px;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 1000px;
+    }
+
+    th {
+      background: #1e2a47;
+      color: white;
+      padding: 12px 8px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    td {
+      border-bottom: 1px solid #e2edf7;
+      padding: 10px 6px;
+      text-align: center;
+      background-color: #ffffff;
+    }
+
+    tr:hover td {
+      background-color: #f8fafd;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: space-between;
+      background: #f1f5f9;
+      border-radius: 28px;
+      padding: 18px 28px;
+      margin-top: 20px;
+    }
+
+    .stat-item {
+      background: white;
+      border-radius: 40px;
+      padding: 8px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      font-weight: bold;
+    }
+
+    .stat-number {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-left: 10px;
+      color: #0f3b5c;
+    }
+
+    .keterangan-info {
+      background: #fef9e3;
+      border-radius: 24px;
+      padding: 16px 24px;
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      font-size: 0.8rem;
+      border-left: 6px solid #facc15;
+    }
+
+    .keterangan-info div {
+      line-height: 1.4;
+    }
+
+    .badge-lulus {
+      background: #22c55e20;
+      color: #15803d;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 30px;
+    }
+
+    .badge-cadangan {
+      background: #facc1520;
+      color: #b45309;
+    }
+
+    .badge-tidak {
+      background: #ef444420;
+      color: #b91c1c;
+    }
+
+    @media (max-width: 720px) {
+      .card-body {
+        padding: 20px;
+      }
+      .btn {
+        padding: 10px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- FORM CARD -->
+  <div class="card">
+    <div class="card-header">
+      <h1>📋 Pendaftaran Mahasiswa Baru</h1>
+      <p>Sistem Input Data Modern — Tanpa Database (client-side memory)</p>
+    </div>
+    <div class="card-body">
+      <form id="registrationForm">
+        <div class="form-grid">
+          <div class="input-group">
+            <label>📌 Jumlah Input Data (Otomatis)</label>
+            <input type="text" id="autoCountInput" readonly placeholder="Terisi otomatis" style="background:#f1f5f9;">
+          </div>
+          <div class="input-group">
+            <label>🔢 Kode Pendaftaran (Otomatis)</label>
+            <input type="text" id="autoKode" readonly placeholder="A2-101-9" style="background:#f1f5f9; font-family: monospace;">
+          </div>
+          <div class="input-group">
+            <label>👤 Nama Pendaftar</label>
+            <input type="text" id="nama" placeholder="Masukkan nama lengkap" required>
+          </div>
+          <div class="input-group">
+            <label>⚧ Jenis Kelamin</label>
+            <div class="radio-group">
+              <label><input type="radio" name="jk" value="Laki-Laki" checked> Laki-Laki</label>
+              <label><input type="radio" name="jk" value="Perempuan"> Perempuan</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>🏙️ Tempat Lahir</label>
+            <input type="text" id="tempatLahir" placeholder="Contoh: Jakarta" required>
+          </div>
+          <div class="input-group">
+            <label>📅 Tanggal Lahir (mm/dd/yyyy)</label>
+            <input type="date" id="tanggalLahir" required>
+          </div>
+          <div class="input-group">
+            <label>🏫 Asal Sekolah</label>
+            <input type="text" id="asalSekolah" placeholder="Nama SMA/SMK" required>
+          </div>
+          <div class="input-group">
+            <label>💼 Pekerjaan Orang Tua</label>
+            <input type="text" id="pekerjaanOrtu" placeholder="PNS / Wiraswasta / dll" required>
+          </div>
+          <!-- Nilai Tes -->
+          <div class="input-group nilai-row">
+            <label>📐 Matematika (0-100)</label>
+            <input type="number" id="nilaiMatematika" min="0" max="100" step="1" value="70" required>
+          </div>
+          <div class="input-group nilai-row">
+            <label>🇬🇧 Bahasa Inggris (0-100)</label>
+            <input type="number" id="nilaiInggris" min="0" max="100" step="1" value="70" required>
+          </div>
+          <div class="input-group nilai-row">
+            <label>📚 Pengetahuan Umum (0-100)</label>
+            <input type="number" id="nilaiUmum" min="0" max="100" step="1" value="70" required>
+          </div>
+        </div>
+        <div class="button-bar">
+          <button type="submit" class="btn btn-primary">✅ Simpan Pendaftar</button>
+          <button type="button" id="resetFormBtn" class="btn btn-reset">🗑️ Reset Form</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TABEL DATA PENDAFTARAN -->
+  <div class="card">
+    <div class="card-header" style="background: #2d3e5f;">
+      <h2>📊 Data Pendaftaran</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-wrapper">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Kode</th><th>Nama</th><th>Tempat</th><th>JK</th><th>Tgl Lahir</th>
+              <th>Pekerjaan Ortu</th><th>Gedung</th><th>Bulan</th><th>MTK</th>
+              <th>Inggris</th><th>Umum</th><th>Rata-rata</th><th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="13" style="text-align:center;">Belum ada data, silakan tambah pendaftar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stat-box">
+        <div class="stat-item">📌 Total Pendaftar : <span id="totalPendaftar" class="stat-number">0</span></div>
+        <div class="stat-item">✅ Peserta Lulus : <span id="totalLulus" class="stat-number">0</span></div>
+        <div class="stat-item">❌ Tidak Lulus : <span id="totalTidakLulus" class="stat-number">0</span></div>
+        <div class="stat-item">🔄 Cadangan (60-69) : <span id="totalCadangan" class="stat-number">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keterangan Kode & Kelulusan -->
+  <div class="keterangan-info">
+    <div><strong>📌 Keterangan Kode:</strong><br>
+    A = Gedung A &nbsp;| B = Gedung B <br>
+    V = Viktor (kode karakter ke-2) , contoh A2-101-9<br>
+    Karakter terakhir = Bulan Tes (dari tgl lahir/bulan pendaftaran: bulan saat ini)<br>
+    Format: [GEDUNG][Angka Unik]-[Bulan] misal A2-101-9 (9 = bulan September)</div>
+    <div><strong>🎓 Ketentuan Kelulusan:</strong><br>
+    Rata-rata = (MTK+Inggris+Umum)/3 <br>
+    ≥ 70 = Lulus &nbsp;&nbsp; 60–69 = Cadangan &nbsp;&nbsp; &lt;60 = Tidak Lulus</div>
+    <div><strong>💡 Kode unik:</strong> dihasilkan otomatis berdasarkan data: gedung (A/B berdasar karakter 'A' atau 'B' dari digit kode simulated), tapi kami buat aturan: Nama depan + Urutan</div>
+  </div>
+</div>
+
+<script>
+  // ---------- STORAGE (tanpa database) ----------
+  let pendaftarList = [];     // array of objects
+
+  // Fungsi untuk menghasilkan kode pendaftaran sesuai contoh: A2-101-9
+  // Aturan: 
+  // - Gedung: A (jika jumlah pendaftar genap? tapi supaya konsisten kita pakai: berdasarkan huruf awal Nama? 
+  //   namun soal menyediakan "Gedung A" / "Gedung B" pada kolom tabel Gedung. Agar dinamis dan menarik:
+  //   Gedung diambil dari huruf pertama nama (vokal/konsonan) atau sesederhana: jika ID pendaftar %2 ==0 -> Gedung A, else Gedung B?
+  //   Tapi untuk memenuhi tampilan yang fleksibel, kita definisikan: jika nilai matematika >=70 => Gedung A, else Gedung B.
+  //   Juga bisa berdasarkan pilihan? Tapi karena tidak ada pilihan gedung, biar konsisten dan menarik.
+  //   Kode contoh: A2-101-9 -> [Gedung][AngkaUnik 2 digit?] - [3 digit urut] - [bulan tes]
+  //   Implementasi: 
+  //   - Gedung huruf awal : 'A' atau 'B' sesuai aturan internal (misal nilai rata2 >70 => A else B)
+  //   - Karakter kedua (angka setelah gedung) = angka jabawan (1-9) -> diambil dari jumlah karakter nama modulo 9 +1
+  //   - 3 digit unik: nomor urut pendaftar (1..999)
+  //   - terakhir = bulan saat pendaftaran (tanggal hari ini / jika ingin dari tgl lahir, lebih logis: bulan tes = bulan saat input)
+  //   lebih intuitif: bulan tes = bulan sekarang (new Date()). karena tidak ada field bulan ujian, kita pakai bulan sistem.
+  
+  function generateKodePendaftaran(indexNumber, nilaiRata, namaPendaftar) {
+    // Gedung: berdasarkan nilai rata-rata (simulasi) jika >=70 => Gedung A, else Gedung B
+    const gedung = (nilaiRata >= 70) ? 'A' : 'B';
+    // Karakter angka kedua (acak tapi stabil) berdasarkan panjang nama (1-9)
+    let charNum = (namaPendaftar.length % 9) + 1;  // 1..9
+    // 3 digit urut (index+1) dengan padding
+    const urutTigaDigit = String(indexNumber + 1).padStart(3, '0');
+    // Bulan tes: bulan saat ini (1-12)
+    const now = new Date();
+    let bulanTes = now.getMonth() + 1;  // 1-12
+    // membentuk: A2-101-9 , contoh: Gedung+charNum + "-" + urut + "-" + bulanTes
+    const kode = `${gedung}${charNum}-${urutTigaDigit}-${bulanTes}`;
+    return { kode, gedung, bulan: bulanTes };
+  }
+
+  // hitung rata-rata dan status kelulusan
+  function hitungStatus(mtk, inggris, umum) {
+    const rata = (mtk + inggris + umum) / 3;
+    let keterangan = '';
+    if (rata >= 70) keterangan = 'Lulus';
+    else if (rata >= 60 && rata <= 69) keterangan = 'Cadangan';
+    else keterangan = 'Tidak Lulus';
+    return { rata: rata.toFixed(2), keterangan };
+  }
+
+  // refresh tabel & statistik & update otomatis jumlah data & kode di form (kode terbaru)
+  function refreshTampilan() {
+    const tbody = document.getElementById('tableBody');
+    if (!tbody) return;
+    
+    if (pendaftarList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;">📭 Belum ada data, silakan tambah pendaftar</td></tr>';
+      document.getElementById('totalPendaftar').innerText = '0';
+      document.getElementById('totalLulus').innerText = '0';
+      document.getElementById('totalTidakLulus').innerText = '0';
+      document.getElementById('totalCadangan').innerText = '0';
+      document.getElementById('autoCountInput').value = '0';
+      document.getElementById('autoKode').value = 'A2-101-9';
+      return;
+    }
+    
+    // update total pendaftar di form
+    document.getElementById('autoCountInput').value = pendaftarList.length;
+    // update contoh kode terbaru untuk pendaftar berikutnya (berdasarkan data terakhir / generate kode baru untuk new pendaftar)
+    // kita generate kode fiktif preview berdasarkan data dummy (nama depan dummy dan rata2?)
+    // biar realtime: kita buat preview kode berikutnya dengan asumsi data baru rata2 70 dan nama "Contoh"
+    const previewRata = 70;
+    const previewNama = "PendaftarBaru";
+    const nextIndex = pendaftarList.length;
+    const previewKodeObj = generateKodePendaftaran(nextIndex, previewRata, previewNama);
+    document.getElementById('autoKode').value = previewKodeObj.kode;
+    
+    // hitung statistik
+    let lulusCount = 0, tidakLulusCount = 0, cadanganCount = 0;
+    pendaftarList.forEach(p => {
+      if (p.keterangan === 'Lulus') lulusCount++;
+      else if (p.keterangan === 'Tidak Lulus') tidakLulusCount++;
+      else if (p.keterangan === 'Cadangan') cadanganCount++;
+    });
+    document.getElementById('totalPendaftar').innerText = pendaftarList.length;
+    document.getElementById('totalLulus').innerText = lulusCount;
+    document.getElementById('totalTidakLulus').innerText = tidakLulusCount;
+    document.getElementById('totalCadangan').innerText = cadanganCount;
+    
+    // render tabel
+    let htmlRows = '';
+    for (let i = 0; i < pendaftarList.length; i++) {
+      const d = pendaftarList[i];
+      let badgeClass = '';
+      if (d.keterangan === 'Lulus') badgeClass = 'badge-lulus';
+      else if (d.keterangan === 'Cadangan') badgeClass = 'badge-cadangan';
+      else badgeClass = 'badge-tidak';
+      
+      htmlRows += `<tr>
+        <td>${escapeHtml(d.kode)}</td>
+        <td>${escapeHtml(d.nama)}</td>
+        <td>${escapeHtml(d.tempatLahir)}</td>
+        <td>${escapeHtml(d.jk)}</td>
+        <td>${escapeHtml(d.tanggalLahir)}</td>
+        <td>${escapeHtml(d.pekerjaanOrtu)}</td>
+        <td>${escapeHtml(d.gedung)}</td>
+        <td>${d.bulanTes}</td>
+        <td>${d.matematika}</td>
+        <td>${d.inggris}</td>
+        <td>${d.umum}</td>
+        <td>${d.rata}</td>
+        <td><span class="${badgeClass}" style="padding:4px 12px; border-radius:20px;">${d.keterangan}</span></td>
+      </tr>`;
+    }
+    tbody.innerHTML = htmlRows;
+  }
+  
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+  
+  // fungsi tambah pendaftar
+  function tambahPendaftar(event) {
+    event.preventDefault();
+    
+    // ambil nilai dari form
+    const nama = document.getElementById('nama').value.trim();
+    const tempatLahir = document.getElementById('tempatLahir').value.trim();
+    const jkRadios = document.querySelectorAll('input[name="jk"]');
+    let jk = 'Laki-Laki';
+    for (let radio of jkRadios) {
+      if (radio.checked) { jk = radio.value; break; }
+    }
+    const tanggalLahir = document.getElementById('tanggalLahir').value;
+    const asalSekolah = document.getElementById('asalSekolah').value.trim();
+    const pekerjaanOrtu = document.getElementById('pekerjaanOrtu').value.trim();
+    let mtk = parseFloat(document.getElementById('nilaiMatematika').value);
+    let inggris = parseFloat(document.getElementById('nilaiInggris').value);
+    let umum = parseFloat(document.getElementById('nilaiUmum').value);
+    
+    if (isNaN(mtk)) mtk = 0;
+    if (isNaN(inggris)) inggris = 0;
+    if (isNaN(umum)) umum = 0;
+    mtk = Math.min(100, Math.max(0, mtk));
+    inggris = Math.min(100, Math.max(0, inggris));
+    umum = Math.min(100, Math.max(0, umum));
+    
+    if (!nama || !tempatLahir || !tanggalLahir || !asalSekolah || !pekerjaanOrtu) {
+      alert('Mohon lengkapi semua field (Nama, Tempat Lahir, Tanggal Lahir, Asal Sekolah, Pekerjaan Ortua)');
+      return;
+    }
+    
+    const { rata, keterangan } = hitungStatus(mtk, inggris, umum);
+    const rataNumeric = parseFloat(rata);
+    
+    // generate kode pendaftaran & gedung berdasarkan data (rata + nama)
+    const newIndex = pendaftarList.length;  // index berikutnya
+    const { kode, gedung, bulan } = generateKodePendaftaran(newIndex, rataNumeric, nama);
+    
+    // object pendaftar
+    const pendaftarBaru = {
+      kode: kode,
+      nama: nama,
+      tempatLahir: tempatLahir,
+      jk: jk,
+      tanggalLahir: tanggalLahir,
+      asalSekolah: asalSekolah,
+      pekerjaanOrtu: pekerjaanOrtu,
+      matematika: mtk,
+      inggris: inggris,
+      umum: umum,
+      rata: rata,
+      keterangan: keterangan,
+      gedung: gedung,
+      bulanTes: bulan
+    };
+    
+    pendaftarList.push(pendaftarBaru);
+    refreshTampilan();
+    
+    // reset form kecuali radio dan mempertahankan beberapa default (opsional: reset nilai form)
+    // sekalian reset input tapi jangan hapus data random, kita reset biar fresh
+    document.getElementById('registrationForm').reset();
+    // setelah reset set radio Laki-laki default
+    document.querySelector('input[value="Laki-Laki"]').checked = true;
+    // set default nilai ke 70 biar mudah
+    document.getElementById('nilaiMatematika').value = '70';
+    document.getElementById('nilaiInggris').value = '70';
+    document.getElementById('nilaiUmum').value = '70';
+    // fokus ke nama
+    document.getElementById('nama').focus();
+    
+    // update preview kode dan jumlah lagi (refresh)
+    setTimeout(() => {
+      if(pendaftarList.length > 0) {
+        const nextPreviewIdx = pendaftarList.length;
+        const dummyNama = "NamaBaru";
+        const dummyRata = 70;
+        const preview = generateKodePendaftaran(nextPreviewIdx, dummyRata, dummyNama);
+        document.getElementById('autoKode').value = preview.kode;
+        document.getElementById('autoCountInput').value = pendaftarList.length;
+      } else {
+        document.getElementById('autoCountInput').value = '0';
+        document.getElementById('autoKode').value = 'A2-101-9';
+      }
+    }, 10);
+  }
+  
+  // reset semua data (clear array)
+  function resetSemuaData() {
+    if (confirm('⚠️ Reset seluruh data pendaftaran? Semua data akan hilang (tanpa database). Lanjutkan?')) {
+      pendaftarList = [];
+      refreshTampilan();
+      document.getElementById('registrationForm').reset();
+      document.querySelector('input[value="Laki-Laki"]').checked = true;
+      document.getElementById('nilaiMatematika').value = '70';
+      document.getElementById('nilaiInggris').value = '70';
+      document.getElementById('nilaiUmum').value = '70';
+      document.getElementById('nama').focus();
+      // reset jumlah dan kode tampilan
+      document.getElementById('autoCountInput').value = '0';
+      document.getElementById('autoKode').value = 'A2-101-9';
+    }
+  }
+  
+  // reset form saja (bukan reset data) -> hanya bersihkan field
+  function resetFormOnly() {
+    document.getElementById('registrationForm').reset();
+    document.querySelector('input[value="Laki-Laki"]').checked = true;
+    document.getElementById('nilaiMatematika').value = '70';
+    document.getElementById('nilaiInggris').value = '70';
+    document.getElementById('nilaiUmum').value = '70';
+    document.getElementById('nama').focus();
+    // tetap hitung jumlah data tidak berubah, hanya reset input
+    if(pendaftarList.length > 0) {
+      const nextIdx = pendaftarList.length;
+      const previewKode = generateKodePendaftaran(nextIdx, 70, "Pendaftar");
+      document.getElementById('autoKode').value = previewKode.kode;
+    } else {
+      document.getElementById('autoKode').value = 'A2-101-9';
+    }
+    document.getElementById('autoCountInput').value = pendaftarList.length;
+  }
+  
+  // inisialisasi dan event listeners
+  window.addEventListener('DOMContentLoaded', () => {
+    refreshTampilan();
+    const form = document.getElementById('registrationForm');
+    form.addEventListener('submit', tambahPendaftar);
+    const resetBtn = document.getElementById('resetFormBtn');
+    resetBtn.addEventListener('click', resetFormOnly);
+    // tambahkan tombol reset data total? karena requirement ada tombol "Sampai Reset" di mockup, ada dua tombol: Sampai dan Reset
+    // sesuai gambar ada tulisan "Sampai" "Reset" di form, kita buat tombol kedua di luar? sesuai UI kita sudah punya Simpan dan Reset Form (reset form)
+    // tetapi untuk reset semua data (penghapusan seluruh daftar) kita buat tombol tambahan yang lebih jelas: di area tabel
+    const extraResetAllBtn = document.createElement('button');
+    extraResetAllBtn.innerText = '🗑️ Hapus Semua Data (Reset Total)';
+    extraResetAllBtn.classList.add('btn', 'btn-reset');
+    extraResetAllBtn.style.marginLeft = 'auto';
+    extraResetAllBtn.style.backgroundColor = '#fecaca';
+    extraResetAllBtn.style.color = '#991b1b';
+    const statDiv = document.querySelector('.stat-box');
+    if (statDiv) {
+      const wrapper = document.createElement('div');
+      wrapper.style.display = 'flex';
+      wrapper.style.justifyContent = 'flex-end';
+      wrapper.style.marginTop = '16px';
+      extraResetAllBtn.onclick = resetSemuaData;
+      wrapper.appendChild(extraResetAllBtn);
+      statDiv.parentNode.insertBefore(wrapper, statDiv.nextSibling);
+    } else {
+      // fallback
+      const cardBody = document.querySelector('.card:last-of-type .card-body');
+      if(cardBody) cardBody.appendChild(extraResetAllBtn);
+      extraResetAllBtn.onclick = resetSemuaData;
+    }
+    
+    // set default placeholder untuk tanggal lahir (mm/dd/yyyy) tapi input date menggunakan yyyy-mm-dd, tetap user friendly
+    if(!document.getElementById('tanggalLahir').value) {
+      const today = new Date().toISOString().split('T')[0];
+      // jangan set default otomatis biar user isi
+    }
+    // menampilkan preview awal
+    document.getElementById('autoCountInput').value = '0';
+    document.getElementById('autoKode').value = 'A2-101-9';
+  });
+</script>
+</body>
+</html>   pisahkan masing masing html, css, dan js
